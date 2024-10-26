@@ -1,0 +1,32 @@
+<h2>Review Submissions</h2>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Form Title</th>
+            <th>Submission Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.user.username }}</td>
+                <td>{{ submission.form_title }}</td>
+                <td>{{ submission.created_at }}</td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="submission_id" value="{{ submission.id }}">
+                        <textarea name="admin_comments" placeholder="Add comments..."></textarea>
+                        <button type="submit">Review</button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">No submissions to review.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
