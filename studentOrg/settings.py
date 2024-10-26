@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'Submitted_Forms',
-    'email_templates'
+    'email_templates',
+    'authentication'
 ]
 
 MIDDLEWARE = [
