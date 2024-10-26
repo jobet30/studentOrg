@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .models import User, Profile
@@ -7,7 +7,33 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-def Register(request):
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            response_data = {
+                'status': 'success',
+                'message': 'User logged in successfully',
+                'user': {
+                    'username': user.username,
+                    'email': user.email
+                }
+            }
+            return JsonResponse(response_data, status=200)
+        else:
+            response_data = {
+                'status': 'error',
+                'message': 'Invalid credentials'
+            }
+            return JsonResponse(response_data, status=401)
+    else:
+        return render(request, 'users/login.html')
+
+def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -38,7 +64,7 @@ def Register(request):
 def user_profile(request):
     if request.method == 'GET':
         try:
-            profile = Profile.objects.get(user=request.user)
+            profile = get_object_or_404(Profile, user=request.user)
             response_data = {
                 'username': profile.user.username,
                 'bio': profile.bio,
@@ -59,10 +85,7 @@ def user_profile(request):
 
 @csrf_exempt
 def update_profile(request):
-    try:
-        profile = Profile.objects.get(user=request.user)
-    except Profile.DoesNotExist:
-        return JsonResponse({'status': 'error', 'message': 'Profile not found'}, status=404)
+    profile = get_object_or_404(Profile, user=request.user)
 
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
