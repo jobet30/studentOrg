@@ -1,25 +1,33 @@
+{% load static %}
 <div class="container mt-5">
     <h1 class="text-center">Profile</h1>
 
     <div class="card mb-4">
-        <div class="card-body">
+        <div class="card-body text-center">
             <h5 class="card-title">{{ profile.username }}'s Profile</h5>
-            {% if profile.profile_picture %}
-                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px;">
-            {% else %}
-                <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px;">
-            {% endif %}
+            
+            <div class="mb-3">
+                {% if profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+                {% else %}
+                    <img src="{% static 'images/default_profile.png' %}" alt="Default Profile Picture" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+                {% endif %}
+            </div>
+
             <p><strong>Bio:</strong> {{ profile.bio|default:"No bio available" }}</p>
             <p><strong>Location:</strong> {{ profile.location|default:"Location not specified" }}</p>
-            <p><strong>Website:</strong> <a href="{{ profile.website }}" target="_blank">{{ profile.website|default:"No website" }}</a></p>
+            <p><strong>Website:</strong> 
+                <a href="{{ profile.website }}" target="_blank">{{ profile.website|default:"No website" }}</a>
+            </p>
+
             <h6>Skills:</h6>
-            <ul>
+            <ul class="list-group">
                 {% if profile.skills %}
                     {% for skill in profile.skills %}
-                        <li>{{ skill }}</li>
+                        <li class="list-group-item">{{ skill }}</li>
                     {% endfor %}
                 {% else %}
-                    <li>No skills added.</li>
+                    <li class="list-group-item">No skills added.</li>
                 {% endif %}
             </ul>
         </div>
