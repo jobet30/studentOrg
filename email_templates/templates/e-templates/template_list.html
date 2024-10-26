@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Email Templates</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Logo</th>
+            <th>HTML Content</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for template in templates %}
+        <tr>
+            <td>{{ template.id }}</td>
+            <td>{{ template.name }}</td>
+            <td>
+                {% if template.logo %}
+                    <img src="{{ template.logo.url }}" alt="Logo" style="width: 50px;">
+                {% endif %}
+            </td>
+            <td>{{ template.html_content|slice:":100" }}...</td>
+            <td>
+                <a href="{% url 'email_template_update' template.id %}">Edit</a>
+                <form action="{% url 'email_template_delete' template.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

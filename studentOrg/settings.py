@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'Submitted_Forms'
+    'Submitted_Forms',
+    'email_templates'
 ]
 
 MIDDLEWARE = [
