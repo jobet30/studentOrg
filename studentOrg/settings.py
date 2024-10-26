@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'users',
     'Submitted_Forms',
     'email_templates',
-    'authentication'
+    'authentication',
+    'profiles'
 ]
 
 MIDDLEWARE = [
